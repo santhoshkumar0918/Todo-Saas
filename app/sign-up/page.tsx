@@ -11,7 +11,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/router";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Link } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { on } from "stream";
 
 function page() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -113,9 +115,49 @@ function page() {
                   </button>
                 </div>
               </div>
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              <Button type="submit" className="w-full">
+                Sign Up
+              </Button>
             </form>
-          ) : null}
+          ) : (
+            <form onSubmit={onPressVerify}>
+              <div className="apace-y-2 ">
+                <label htmlFor="code">Verification Code</label>
+                <Input
+                  id="code"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="Enter a Verification Code"
+                  required
+                />
+              </div>
+              {error && (
+                <Alert variant="destructive">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+              <Button type="submit" className="w-full">
+                verify Email
+              </Button>
+            </form>
+          )}
         </CardContent>
+        <CardFooter className="justify-cennter">
+          <p className="text-sm text-muted-foreground">
+            Already have an account{""}
+            <Link
+              href="/sigin"
+              className="text-primary hover:underline font-medium "
+            >
+              SignIn
+            </Link>
+          </p>
+        </CardFooter>
       </Card>
     </div>
   );
